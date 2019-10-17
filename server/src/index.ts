@@ -7,6 +7,8 @@ import { PORT, HOST } from './env';
 
 const app = express();
 
+app.use(express.json());
+
 app.use(agentRoutes);
 app.use(clientRoutes);
 
