@@ -3,7 +3,7 @@ import * as  express from 'express';
 
 const router = express.Router();
 
-router.get('/build', (req, res) => {
+router.post('/build', (req, res) => {
     res.send('Hello build');
 });
 
