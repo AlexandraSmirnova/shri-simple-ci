@@ -1,6 +1,9 @@
   
 import * as  express from 'express';
 import db from '../db';
+import { Agent } from '../types';
+import { checkAgent } from '../utils';
+
 
 const router = express.Router();
 
@@ -13,6 +16,14 @@ router.post('/notify_agent', (req, res) => {
     }
 
     const agents = db.get('agents').value();
+    const checkIfAgentExists = checkAgent(host, port);
+
+    if (agents.some(checkIfAgentExists)) {
+        console.log(`Agent has already registered on ${host}:${port}`);
+        res.sendStatus(200);
+        return   
+    }
+    
     agents.push({ host, port });
 
     db.write();

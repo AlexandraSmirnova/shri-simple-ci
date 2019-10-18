@@ -22,10 +22,15 @@ export const clone = async (url: string, id: string) => {
 
 export const checkout = (id: string, commitHash: string) => {
     const pathToBuild = path.join(BUILD_ROOT, id);
+
     return execWrapper(`git checkout --detach ${commitHash}`, pathToBuild);
 }
 
-export const runCommand = (id: string, command: string) => {
+export const runCommand = async (id: string, command: string) => {
     const pathToBuild = path.join(BUILD_ROOT, id);
-    return execWrapper(command, pathToBuild);
+
+    return {
+        ...await execWrapper(command, pathToBuild),
+        status: 0,
+    };
 }

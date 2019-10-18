@@ -3,7 +3,7 @@ import { BUILD_ROOT } from "../env";
 import { clone, checkout, runCommand } from './commands';
 
 
-export const startBuild = async (
+export const startBuild = (
     repo: string,
     id: string,
     commitHash: string,
@@ -13,11 +13,8 @@ export const startBuild = async (
         fs.mkdirSync(BUILD_ROOT);
     }
 
-    const { stderr, stdout } = await clone(repo, id)
+    return clone(repo, id)
         .then(() => checkout(id, commitHash))
         .then(() => runCommand(id, command));
-
-    console.log('STDERR', stderr);
-    console.log('STDOUT', stdout);
 }
 
