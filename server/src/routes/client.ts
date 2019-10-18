@@ -1,10 +1,13 @@
   
 import * as  express from 'express';
-
+import { getFreeAgent, addTaskToBuild } from '../agentService';
+import db from '../db';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render('index');
+    res.render('index', {
+        builds: db.get('builds').value(),
+    });
 });
 
 router.get('/build', (req, res) => {
@@ -12,8 +15,22 @@ router.get('/build', (req, res) => {
 });
 
 router.post('/build', (req, res) => {
-    console.log(req.body);
-    res.render('index');
+    const { commitHash, command } = req.body;
+
+    const agent = getFreeAgent();
+
+    if (!agent) {
+        res.render('index', {
+            error: "There is no free agents. Please, run more agents",
+            builds: db.get('builds').value(),
+        });
+        return;
+    }
+
+    addTaskToBuild(agent, commitHash, command);
+    res.render('index', {
+        builds: db.get('builds').value(),
+    });
 });
 
 export default router;

@@ -4,10 +4,13 @@ import * as path from 'path';
 import agentRoutes from './routes/agent';
 import clientRoutes from './routes/client';
 import { PORT, HOST } from './env';
+import * as bodyParser from 'body-parser';
 
 const app = express();
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json())
 
 app.use(agentRoutes);
 app.use(clientRoutes);

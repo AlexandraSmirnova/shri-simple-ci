@@ -1,12 +1,42 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>SHRI Ci System</title>
-    </head>
-    <body>
-        <h1>SHRI CI System</h1>
-        <a href="/build">build page</a>
 
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title>SHRI Ci System</title>
+</head>
+
+<body>
+    <h1>SHRI CI System</h1>
+
+    <form action='/build' method="post">
+        <% if (locals.error) { %>
+        <div style="color: red"><%= locals.error %></div>
+        <% } %>
+        <input name="commitHash" type="text" placeholder="Хеш коммита" required></input>
+        <input name="command" type="text" placeholder="Команда" required></input>
+        <button type="submit">Запустить сборку</button>
+    </form>
+
+    <% if (locals.builds.length) { %>
+    <br>
+    <table width="500">
+        <thead align="left" >
+            <th>ID</th>
+            <th colspan="2">COMMIT</th>
+            <th>STATUS</th>
+        </thead>
+        <tbody>
+            <% locals.builds.forEach((build) => { %>
+            <tr>
+                <td><%= build.id %></td>
+                <td colspan="2"><a href="/build/<%= build.id %>"><%= build.commitHash %></a></td>
+                <td ><%= build.status %></td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+    <% } %>
+</body>
+
 </html>
