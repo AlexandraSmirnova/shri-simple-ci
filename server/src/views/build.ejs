@@ -1,12 +1,49 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>SHRI Ci System</title>
-    </head>
-    <body>
-        <h1>SHRI CI System</h1>
-        <h2>Build page</h2>
-        <a href="/">...</a>
-    </body>
+
+<head>
+    <meta charset="UTF-8">
+    <title>SHRI Ci System</title>
+</head>
+
+<body>
+    <h1>SHRI CI System</h1>
+    <div><a href="/">Back to main</a></div>
+
+    <br>
+
+    <div>
+        <strong>ID: </strong><%= locals.build.id %>
+    </div>
+
+    <div>
+        <strong>Commit Hash: </strong><%= locals.build.commitHash %>
+    </div>
+
+    <div>
+        <strong>Command: </strong><%= locals.build.command %>
+    </div>
+
+    <div>
+        <strong>Status: </strong><%= locals.build.status %>
+    </div>
+
+    <% if (locals.build.stderr) { %>
+    <br>
+    <div>
+        <strong>STDERR:</strong>
+        <div style="color: white; background: black; padding: 10px; white-space: pre;"><%= locals.build.stderr %></div>
+    </div>
+    <% } %>
+
+    <% if (locals.build.stdout) { %>
+    <br>
+    <div>
+        <strong>STDOUT:</strong>
+        <div style="color: white; background: black; padding: 10px; white-space: pre;"><%= locals.build.stdout %></div>
+    </div>
+    <% } %>
+
+</body>
+
 </html>

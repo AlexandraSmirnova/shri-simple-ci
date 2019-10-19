@@ -1,4 +1,4 @@
-  
+
 import * as  express from 'express';
 import { getFreeAgent, addTaskToBuild, runTaskOnAgent } from '../agentService';
 import db from '../db';
@@ -10,8 +10,17 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/build', (req, res) => {
-    res.render('build');
+router.get('/build/:id', (req, res) => {
+    const builds: any = db.get('builds');
+    const build = builds.find({ id: req.params.id }).value();
+
+    if (!build) {
+        res.sendStatus(404);
+    }
+
+    res.render('build', {
+        build
+    });
 });
 
 router.post('/build', (req, res) => {
@@ -29,7 +38,7 @@ router.post('/build', (req, res) => {
 
     const newTask = addTaskToBuild(agent, commitHash, command);
     runTaskOnAgent(agent, newTask);
-    
+
     res.render('index', {
         builds: db.get('builds').value(),
     });
