@@ -21,7 +21,7 @@
     <% if (locals.builds.length) { %>
     <br>
     <table width="500">
-        <thead align="left" >
+        <thead align="left">
             <th>ID</th>
             <th colspan="2">COMMIT</th>
             <th>STATUS</th>
@@ -31,7 +31,7 @@
             <tr>
                 <td><%= build.id %></td>
                 <td colspan="2"><a href="/build/<%= build.id %>"><%= build.commitHash %></a></td>
-                <td ><%= build.status %></td>
+                <td><%= build.status %></td>
             </tr>
             <% }) %>
         </tbody>

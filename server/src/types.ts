@@ -11,4 +11,6 @@ export interface Build {
     commitHash: string;
     command: string;
     status: Status;
+    stderr?: string;
+    stdout?: string;
 }

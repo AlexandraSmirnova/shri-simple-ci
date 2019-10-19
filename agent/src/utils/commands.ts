@@ -29,8 +29,14 @@ export const checkout = (id: string, commitHash: string) => {
 export const runCommand = async (id: string, command: string) => {
     const pathToBuild = path.join(BUILD_ROOT, id);
 
-    return {
-        ...await execWrapper(command, pathToBuild),
-        status: 0,
-    };
-}
+    return execWrapper(command, pathToBuild)
+        .then((res) => ({
+            ...res,
+            status: 'succeed',
+        }))
+        .catch((err) => ({
+            stderr: err.stderr ? err.stderr : 'Could not run command',
+            stdout: '',
+            status: 'failed',
+        }));
+};

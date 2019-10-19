@@ -19,5 +19,5 @@ app.set('views',path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.listen(parseInt(PORT), HOST, () => {
-    console.log(`Server have been started on ${HOST}:${PORT}`);
+    console.info(`Server have been started on ${HOST}:${PORT}`);
 });

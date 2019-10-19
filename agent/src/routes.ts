@@ -6,10 +6,17 @@ import { sendBuildResult } from './utils/server';
 const router = express.Router();
 
 router.post('/build', async (req, res) => {
+    console.log('received', req.body);
     const { repo, id, commitHash, command } = req.body;
-    const { stderr , stdout, status } =  await startBuild(repo, id, commitHash, command);
+    
+    startBuild(repo, id, commitHash, command)
+        .then((result) => {
+            const { stderr, stdout, status } = result;
+            sendBuildResult(id, stderr, stdout, status)
+        });
+    
 
-    sendBuildResult(stderr, stdout, status)
+    res.sendStatus(200);
 });
 
 export default router;

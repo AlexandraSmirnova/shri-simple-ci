@@ -15,6 +15,11 @@ export const startBuild = (
 
     return clone(repo, id)
         .then(() => checkout(id, commitHash))
-        .then(() => runCommand(id, command));
+        .then(() => runCommand(id, command))
+        .catch((res) => ({
+            stderr: res.stderr ? res.stderr : 'Could not clone repository',
+            stdout: '',
+            status: 'failed'
+        }));
 }
 

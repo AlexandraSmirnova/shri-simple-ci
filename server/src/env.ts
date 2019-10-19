@@ -1,11 +1,11 @@
 if (process.argv.length <= 2) {
-    console.warn(
+    console.info(
         "There is no adress of repository in args\n" +
         "The server will start for default repository: https://github.com/AlexandraSmirnova/shri-react-arcanum.git\n"
     );
 }
 
-export const REPOS_ROOT = process.argv[2];
+export const REPO_ADRESS = process.argv[2] || 'https://github.com/AlexandraSmirnova/shri-react-arcanum.git' ;
 
 export const PORT = process.argv[3] || '3000';
 

@@ -1,7 +1,7 @@
   
 import * as  express from 'express';
 import db from '../db';
-import { Agent } from '../types';
+import { Build } from '../types';
 import { checkAgent } from '../utils';
 
 
@@ -19,7 +19,7 @@ router.post('/notify_agent', (req, res) => {
     const checkIfAgentExists = checkAgent(host, port);
 
     if (agents.some(checkIfAgentExists)) {
-        console.log(`Agent has already registered on ${host}:${port}`);
+        console.info(`Agent has already registered on ${host}:${port}`);
         res.sendStatus(200);
         return   
     }
@@ -28,11 +28,31 @@ router.post('/notify_agent', (req, res) => {
 
     db.write();
     
-    console.log(`Agent registered on ${host}:${port}`);
+    console.info(`Agent registered on ${host}:${port}`);
     res.sendStatus(200);
 });
 
-router.get('/notify_build_result', (req, res) => {
+router.post('/notify_build_result', (req, res) => {
+    const { id, stderr, stdout, status } = req.body;
+
+    console.log('req', req.body);
+    if (!id) {
+        res.sendStatus(404);
+    }
+
+    const builds: any = db.get('builds');
+    const build = builds.find({ id: id }).value();
+    
+    if (!build) {
+        return;
+    }
+
+    console.log('build', build);
+    build.status = status;
+    build.stderr = stderr;
+    build.stdout = stdout;
+    db.write();
+    // освободить агента
     res.send('Hello build');
 });
 

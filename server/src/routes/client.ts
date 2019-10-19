@@ -1,6 +1,6 @@
   
 import * as  express from 'express';
-import { getFreeAgent, addTaskToBuild } from '../agentService';
+import { getFreeAgent, addTaskToBuild, runTaskOnAgent } from '../agentService';
 import db from '../db';
 const router = express.Router();
 
@@ -27,7 +27,9 @@ router.post('/build', (req, res) => {
         return;
     }
 
-    addTaskToBuild(agent, commitHash, command);
+    const newTask = addTaskToBuild(agent, commitHash, command);
+    runTaskOnAgent(agent, newTask);
+    
     res.render('index', {
         builds: db.get('builds').value(),
     });
