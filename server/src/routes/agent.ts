@@ -35,7 +35,6 @@ router.post('/notify_agent', (req, res) => {
 router.post('/notify_build_result', (req, res) => {
     const { id, stderr, stdout, status } = req.body;
 
-    console.log('req', req.body);
     if (!id) {
         res.sendStatus(404);
     }

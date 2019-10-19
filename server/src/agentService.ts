@@ -4,6 +4,8 @@ import { REPO_ADRESS } from "./env";
 import fetch from "node-fetch";
 
 
+const MAX_WAITING_AGENT = 3 * 60 * 1000; //3 min
+
 export const runTaskOnAgent = (agent: Agent, task: Build) => {
     const { host, port } = agent;
     const { id, commitHash, command } = task;
@@ -17,7 +19,18 @@ export const runTaskOnAgent = (agent: Agent, task: Build) => {
             command
         }),
         headers: { 'Content-Type': 'application/json' },
-    }).catch((e) => console.error('err', e)) // как обрабатывать будем?
+    }).catch((e) => removeAgent(agent, e as string))
+    .then(() => {
+        setTimeout(() => {
+            const agents: any = db.get('agents');
+
+            const updatedAgent = agents.find(agent).value();
+
+            if (updatedAgent.taskId) {
+                removeAgent(agent);
+            }
+        }, MAX_WAITING_AGENT)
+    }) 
 }
 
 export const addTaskToBuild = (agent: Agent, commitHash: string, command: string): Build => {
@@ -46,6 +59,23 @@ export const getFreeAgent = (): Agent | null => {
     const freeAgents = agents.filter((agent: Agent) => !agent.taskId).value();
 
     return freeAgents.length ? freeAgents[0] : null;
+}
+
+export const removeAgent = (agent: Agent, reason = "Sorry, agent died") => {
+    const agents: any = db.get('agents');
+    
+    agents.remove(agent)
+
+    if (agent.taskId) {
+        const builds: any = db.get('builds');
+        const build = builds.find({ id: agent.taskId }).value();
+
+        build.status = 'failed';
+        build.stderr = reason;
+    }   
+
+    db.write();
+    console.info(`Agent removed ${agent.host}:${agent.port}`)
 }
 
 export const saveBuildResult = (

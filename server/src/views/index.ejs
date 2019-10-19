@@ -31,7 +31,15 @@
             <tr>
                 <td><%= build.id %></td>
                 <td colspan="2"><a href="/build/<%= build.id %>"><%= build.commitHash %></a></td>
-                <td><%= build.status %></td>
+                <td
+                    <% if (build.status === 'failed') { %> 
+                        style="color: red"
+                    <% } else if (build.status === 'succeed') { %>
+                        style="color: green"
+                    <% }%>
+                >
+                    <%= build.status %>
+                </td>
             </tr>
             <% }) %>
         </tbody>

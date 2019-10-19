@@ -25,7 +25,16 @@
     </div>
 
     <div>
-        <strong>Status: </strong><%= locals.build.status %>
+        <strong>Status: </strong>
+        <span 
+            <% if (locals.build.status === 'failed') { %> 
+                style="color: red"
+            <% } else if (locals.build.status === 'succeed') { %>
+                style="color: green"
+            <% }%>
+        >
+            <%= locals.build.status %>
+        </span>
     </div>
 
     
