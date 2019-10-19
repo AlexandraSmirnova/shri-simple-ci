@@ -42,3 +42,26 @@ export const getFreeAgent = (): Agent | null => {
 
     return freeAgents.length ? freeAgents[0] : null;
 }
+
+export const saveBuildResult = (
+    id: string,
+    stderr: string,
+    stdout: string,
+    status: string,
+) => {
+    const builds: any = db.get('builds');
+    const build = builds.find({ id: id }).value();
+    
+    if (!build) {
+        return;
+    }
+
+    build.status = status;
+    build.stderr = stderr;
+    build.stdout = stdout;
+
+    const agents: any = db.get('agents')
+    const agent = agents.find({ taskId: id }).value();
+    agent.taskId = '';
+    db.write();
+}

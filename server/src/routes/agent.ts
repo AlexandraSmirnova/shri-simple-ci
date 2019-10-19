@@ -3,6 +3,7 @@ import * as  express from 'express';
 import db from '../db';
 import { Build } from '../types';
 import { checkAgent } from '../utils';
+import { saveBuildResult } from '../agentService';
 
 
 const router = express.Router();
@@ -40,20 +41,7 @@ router.post('/notify_build_result', (req, res) => {
         res.sendStatus(404);
     }
 
-    const builds: any = db.get('builds');
-    const build = builds.find({ id: id }).value();
-    
-    if (!build) {
-        return;
-    }
-
-    console.log('build', build);
-    build.status = status;
-    build.stderr = stderr;
-    build.stdout = stdout;
-    db.write();
-    // освободить агента
-    res.send('Hello build');
+    saveBuildResult(id, stderr, stdout, status);
 });
 
 
