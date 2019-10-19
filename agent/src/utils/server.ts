@@ -26,5 +26,6 @@ export const sendBuildResult = (
     })
     .catch((e) => {
         console.error('Cannot send to server: ', e);
+        process.exit(-1);
     })
 }

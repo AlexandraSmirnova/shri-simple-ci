@@ -1,9 +1,9 @@
-import * as path from 'path';
+import config from './config';
 
-export const PORT = process.argv[2] || '3001';
+export const PORT = process.argv[2] || config.PORT;
 
-export const HOST = process.argv[3] || '127.0.0.1';
+export const HOST = process.argv[3] || config.HOST;
 
-export const SERVER_URL = process.argv[4] || 'http://127.0.0.1:3000';
+export const SERVER_URL = process.argv[4] || config.SERVER_URL;
 
-export const BUILD_ROOT = path.join(__dirname, 'builds');
+export const BUILD_ROOT = config.BUILD_ROOT;
