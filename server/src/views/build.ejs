@@ -28,6 +28,21 @@
         <strong>Status: </strong><%= locals.build.status %>
     </div>
 
+    
+    <div>
+        <strong>Date started: </strong>
+        <%= new Date(locals.build.started).toLocaleString() %>
+    </div>
+
+    <div>
+        <strong>Date finished: </strong>
+        <% if (locals.build.finished) { %>
+            <%= new Date(locals.build.finished).toLocaleString() %>
+        <% } else { %>
+            ---
+        <% } %>
+    </div>
+
     <% if (locals.build.stderr) { %>
     <br>
     <div>

@@ -1,7 +1,6 @@
   
 import * as  express from 'express';
 import db from '../db';
-import { Build } from '../types';
 import { checkAgent } from '../utils';
 import { saveBuildResult } from '../agentService';
 

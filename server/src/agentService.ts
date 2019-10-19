@@ -27,7 +27,12 @@ export const addTaskToBuild = (agent: Agent, commitHash: string, command: string
     if (builds.length > 0) {
         id = Number(builds[builds.length - 1].id) + 1;
     }
-    const newBuild: Build = { id: id.toString(), commitHash, command, status: 'pending' };
+    const newBuild: Build = { 
+        id: id.toString(),
+        commitHash, command,
+        status: 'pending',
+        started: Date.now()
+    };
 
     builds.push(newBuild);
     agent.taskId = id.toString();
@@ -59,6 +64,7 @@ export const saveBuildResult = (
     build.status = status;
     build.stderr = stderr;
     build.stdout = stdout;
+    build.finished = Date.now();
 
     const agents: any = db.get('agents')
     const agent = agents.find({ taskId: id }).value();
