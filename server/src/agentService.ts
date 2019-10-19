@@ -26,7 +26,7 @@ export const runTaskOnAgent = (agent: Agent, task: Build) => {
 
             const updatedAgent = agents.find(agent).value();
 
-            if (updatedAgent.taskId) {
+            if (updatedAgent && updatedAgent.taskId) {
                 removeAgent(agent);
             }
         }, MAX_WAITING_AGENT)
@@ -64,7 +64,7 @@ export const getFreeAgent = (): Agent | null => {
 export const removeAgent = (agent: Agent, reason = "Sorry, agent died") => {
     const agents: any = db.get('agents');
     
-    agents.remove(agent)
+    agents.remove(agent).write()
 
     if (agent.taskId) {
         const builds: any = db.get('builds');
@@ -72,9 +72,9 @@ export const removeAgent = (agent: Agent, reason = "Sorry, agent died") => {
 
         build.status = 'failed';
         build.stderr = reason;
+        db.write();
     }   
 
-    db.write();
     console.info(`Agent removed ${agent.host}:${agent.port}`)
 }
 
